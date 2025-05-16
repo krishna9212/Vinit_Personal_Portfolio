@@ -1,6 +1,4 @@
-import React, { useCallback, useState } from "react";
-import { db } from "./../firebase"; // Ensure correct path to firebase.js
-import { collection, addDoc } from "firebase/firestore";
+import React, { useState, useCallback } from "react";
 import "./Contact.css";
 
 function Contact() {
@@ -10,7 +8,6 @@ function Contact() {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Function to validate form fields
   const validateForm = useCallback(() => {
     let formErrors = {};
     if (!name.trim()) formErrors.name = "Full name is required";
@@ -19,19 +16,16 @@ function Contact() {
     return formErrors;
   }, [name, email, message]);
 
-  // Update errors whenever name, email, or message changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "name") setName(value);
     if (name === "email") setEmail(value);
     if (name === "message") setMessage(value);
 
-    // Validate form on every change
     const formErrors = validateForm();
     setErrors(formErrors);
   };
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -39,42 +33,47 @@ function Contact() {
       setErrors(formErrors);
       return;
     }
+
     try {
-      // Add document to Firestore collection
-      const docRef = await addDoc(collection(db, "contacts"), {
-        name,
-        email,
-        message,
-        timestamp: new Date(),
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "bf4995b5-2ec0-4ac3-858e-078f6178a724",
+          name,
+          email,
+          message,
+        }),
       });
-      // Clear form fields and messages on successful submission
-      setName("");
-      setEmail("");
-      setMessage("");
-      setErrors({});
-      setSuccessMessage("Message sent successfully!");
-      console.log("Document written with ID: ", docRef.id); // Log the document ID for verification
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSuccessMessage("Message sent successfully!");
+        setName("");
+        setEmail("");
+        setMessage("");
+        setErrors({});
+      } else {
+        setSuccessMessage("Failed to send message. Try again later.");
+        console.error(result);
+      }
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error submitting form:", error);
+      setSuccessMessage("Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="bg-background text-foreground p-8 text-white h-full w-full">
       <div className="h-[10%] md:h-[5%] w-full text-transparent">.</div>
-      <div className="main-content h-[90%] md:h-[95%] w-full ">
-        {/* Page Title */}
+      <div className="main-content h-[90%] md:h-[95%] w-full">
         <h1 className="text-4xl font-extrabold mb-3">Contact</h1>
-
-        {/* Contact Form Section */}
         <div className="bg-gradient-to-br from-secondary to-accent h-[100%] rounded-xl relative w-full">
-          <div className=" h-full w-full  flex  justify-center">
-            {/* Form with onSubmit handler */}
-            <form
-              className="w-full flex flex-col   pt-16 "
-              onSubmit={handleSubmit}
-            >
-              {/* Name and Email Input Fields */}
+          <div className="h-full w-full flex justify-center">
+            <form className="w-full flex flex-col pt-16" onSubmit={handleSubmit}>
               <div className="flex w-full gap-6 mb-1 p-2">
                 <div className="w-full">
                   <input
@@ -85,7 +84,6 @@ function Contact() {
                     onChange={handleChange}
                     className="w-full p-4 input"
                   />
-                  {/* Error message for name field */}
                   {errors.name && <p className="text-red-500">{errors.name}</p>}
                 </div>
                 <div className="w-full">
@@ -97,13 +95,9 @@ function Contact() {
                     onChange={handleChange}
                     className="w-full p-4 input rounded-xl border border-border"
                   />
-                  {/* Error message for email field */}
-                  {errors.email && (
-                    <p className="text-red-500">{errors.email}</p>
-                  )}
+                  {errors.email && <p className="text-red-500">{errors.email}</p>}
                 </div>
               </div>
-              {/* Message Textarea */}
               <div className="mb-2 w-full p-2">
                 <textarea
                   placeholder="Your Message"
@@ -112,12 +106,8 @@ function Contact() {
                   onChange={handleChange}
                   className="w-full p-4 bg-input text-foreground rounded-xl border border-border bg-transparent outline-none input"
                 ></textarea>
-                {/* Error message for message field */}
-                {errors.message && (
-                  <p className="text-red-500">{errors.message}</p>
-                )}
+                {errors.message && <p className="text-red-500">{errors.message}</p>}
               </div>
-              {/* Submit Button */}
               <div className="text-right p-2 w-full">
                 <button
                   type="submit"
@@ -125,7 +115,6 @@ function Contact() {
                 >
                   Send Message ✈️
                 </button>
-                {/* Success message displayed after form submission */}
                 {successMessage && (
                   <p className="text-green-500 mt-4">{successMessage}</p>
                 )}

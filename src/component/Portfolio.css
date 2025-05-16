@@ -1,0 +1,44 @@
+/* Highlight effect for hovered project cards */
+.hovered {
+  border: 2px solid #ffffff; /* White border for hovered project cards */
+}
+
+/* Styles for images inside hovered project cards */
+.hovered img {
+  transform: scale(1.05); /* Scale up image on hover */
+  filter: brightness(0.8); /* Reduce brightness of image on hover */
+}
+
+/* Overlay button container */
+.onclick {
+  display: none; /* Initially hidden */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+/* Show overlay button on hover */
+.project:hover .onclick {
+  display: flex; /* Show overlay container */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  position: absolute; /* Position overlay absolutely */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Button styles within the overlay */
+.onclick button {
+  color: white; /* Text color */
+  font-size: 1.5rem; /* Button font size */
+  border: none; /* No border */
+  background-color: #2b2b2c; /* Button background color */
+  padding: 10px 20px; /* Padding inside button */
+  border-radius: 8px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+/* Hover effect for buttons */
+.onclick button:hover {
+  background-color: #333334; /* Darker background color on hover */
+}

@@ -1,0 +1,9 @@
+.input {
+  border: 0.1px solid rgba(76, 76, 76, 0.553);
+  border-radius: 19px;
+  outline: none;
+  background-color: transparent;
+}
+.input:focus {
+  border: 0.1px solid rgba(207, 79, 79, 0.553);
+}

@@ -3,7 +3,7 @@ import avatarImg from "./../assets/avtar.png"; // Replace with Vinit's avatar if
 
 const userInfo = {
   name: "Vinit",
-  designation: "Flutter Developer",
+  designation: "Senior Flutter Developer",
   contact: {
     email: "vinit.flutter.28@gmail.com",
     phone: "7597844434",
@@ -22,7 +22,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar h-full w-full bg-[#1E1E1F] rounded-none md:rounded-3xl p-6 outline-1 outline-white outline-dashed flex flex-col gap-3">
       <div className="topsidebar h-[55%] w-full flex flex-col items-center gap-3 pt-3">
-        <div className="img h-[70%] w-[90%] bg-[#373738] rounded-xl">
+        <div className="img h-[70%] w-[90%]  rounded-xl">
           <img
             src={avatarImg}
             alt="avatar logo"
